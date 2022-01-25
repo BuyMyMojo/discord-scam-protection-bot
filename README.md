@@ -3,6 +3,9 @@ Jesus these bots are out of hand
 
 This bot only deletes scam links and nothing else!
 
+## Invite the bot to your server!
+[Invite link](https://discord.com/api/oauth2/authorize?client_id=935372708089315369&permissions=2147560448&scope=bot)
+
 ## What links does this remove?
 All the links found in [BuildBot42's repo](https://github.com/BuildBot42/discord-scam-links)
 
