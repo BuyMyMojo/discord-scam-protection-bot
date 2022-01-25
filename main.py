@@ -33,13 +33,12 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    # this is my personal fork of the list until the main fork takes my changes
-    url = 'https://raw.githubusercontent.com/BuyMyMojo/discord-scam-links/steam-free-nutro_ru_com/list.txt'
-    discord_scam_list = requests.get(url).text
-    scam_links_1 = discord_scam_list.split("\n")
-    scam_links_2 = discord_scam_list.split("\r\n")  # using this helped with another list of URLs I've used in the past, keeping it in just in case
+    my_file = open("list-all-TLD.txt", "r")  # Use a much thiccer list derived from the origional URL
+    content = my_file.read()
+
+    scam_links_1 = content.split("\n")
     for y in scam_links_1:
-        if y in message2 and y != '':
+        if y.casefold() in message2 and y != '':
             try:
                 await message.delete()
                 print("Link found in: discord-scam-links")
@@ -47,16 +46,6 @@ async def on_message(message):
                 break
             except:
                 pass
-    if deleted is not True:
-        for y in scam_links_2:
-            if y in message2 and y != '':
-                try:
-                    await message.delete()
-                    print("Link found in: discord-scam-links")
-                    deleted = True
-                    break
-                except:
-                    pass
 
     if deleted is True:
         pass
