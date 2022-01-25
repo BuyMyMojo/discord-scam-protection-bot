@@ -41,10 +41,11 @@ async def on_message(message):
         return
 
     for y in scam_links_1:
+        scam = y.casefold()
         if y == '':
             break
-        if y.casefold() in message2.split() or f"https://{y.casefold()}" in message2.split() or f"http://{y.casefold()}" in message2.split():
-            if y.casefold() in bot.official_urls:
+        if scam in message2.split() or f"https://{scam}" in message2.split() or f"http://{scam}" in message2.split():
+            if scam in bot.official_urls:
                 break
             try:
                 await message.delete()
