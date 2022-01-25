@@ -9,15 +9,18 @@ intents = nextcord.Intents.all()
 
 bot = commands.Bot(command_prefix='->', description='Prefix is -> | Removing scam links one message at a time', intents=intents, allowed_mentions=nextcord.AllowedMentions(everyone=False, roles=False), max_messages=100000)
 
+
 def get_member(GuildID: int, MemberID: int):
     guild = bot.get_guild(GuildID)
     member = guild.get_member(MemberID)
     return member
 
+
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=nextcord.Game(name="use ->invite to get an invite link! | 🧹 Removing scam bots 🧹 "))
     print("Online")
+
 
 @bot.event
 async def on_message(message):
@@ -34,7 +37,7 @@ async def on_message(message):
     url = 'https://raw.githubusercontent.com/BuyMyMojo/discord-scam-links/steam-free-nutro_ru_com/list.txt'
     discord_scam_list = requests.get(url).text
     scam_links_1 = discord_scam_list.split("\n")
-    scam_links_2 = discord_scam_list.split("\r\n") # using this helped with another list of URLs I've used in the past, keeping it in just in case
+    scam_links_2 = discord_scam_list.split("\r\n")  # using this helped with another list of URLs I've used in the past, keeping it in just in case
     for y in scam_links_1:
         if y in message2 and y != '':
             try:
