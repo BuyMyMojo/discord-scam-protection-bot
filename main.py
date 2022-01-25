@@ -17,6 +17,13 @@ my_file = open("list-all-TLD.txt", "r")  # Use a much thiccer list derived from 
 content = my_file.read()
 scam_links_1 = content.split("\n")
 
+# This is kinda reversed for IF statements but hey it works
+def is_official_link(message2):
+    for official in bot.official_urls:
+        if any(official in string for string in message2.split()) or any(f"https://{official}/" in string for string in message2.split()) or any(f"http://{official}/" in string for string in message2.split()):
+            return False
+    return True
+
 def get_member(GuildID: int, MemberID: int):
     guild = bot.get_guild(GuildID)
     member = guild.get_member(MemberID)
@@ -41,10 +48,12 @@ async def on_message(message):
         return
 
     for y in scam_links_1:
-        scam = y.casefold()
         if y == '':
             break
-        if scam in message2.split() or f"https://{scam}" in message2.split() or f"http://{scam}" in message2.split():
+        scam = y.casefold()
+
+
+        if any(scam in string for string in message2.split()) and is_official_link(message2) or any(f"https://{scam}/" in string for string in message2.split()) and is_official_link(message2) or any(f"http://{scam}/" in string for string in message2.split()) and is_official_link(message2):
             if scam in bot.official_urls:
                 break
             try:
