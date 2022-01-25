@@ -9,7 +9,13 @@ intents = nextcord.Intents.all()
 
 bot = commands.Bot(command_prefix='->', description='Prefix is -> | Removing scam links one message at a time', intents=intents, allowed_mentions=nextcord.AllowedMentions(everyone=False, roles=False), max_messages=100000)
 
+# Exceptions have been added into the generation of the file but leaving this here for now
 bot.official_urls = ['dis.gd', 'discord.co', 'discord.com', 'discord.design', 'discord.dev', 'discord.gg', 'discord.gift', 'discord.gifts', 'discord.media', 'discord.new', 'discord.store', 'discord.tools', 'discordapp.com', 'discordapp.net', 'discordmerch.com', 'discordpartygames.com', 'discord-activities.com', 'discordactivities.com', 'discordsays.com', 'discordstatus.com', 'airhorn.solutions', 'airhornbot.com', 'bigbeans.solutions', 'watchanimeattheoffice.com', 'discordapp.io', 'discordcdn.com', 's.team', 'steam-chat.com', 'steamchina.com', 'steamcommunity.com', 'steamcontent.com', 'steamgames.com', 'steampipe.akamaized.net', 'steampowered.com', 'steamstatic.com', 'steamusercontent.com', 'valve.net', 'valvesoftware.com']
+
+# Open file outside of bot functions to reduce disk calls
+my_file = open("list-all-TLD.txt", "r")  # Use a much thiccer list derived from the origional URL
+content = my_file.read()
+scam_links_1 = content.split("\n")
 
 def get_member(GuildID: int, MemberID: int):
     guild = bot.get_guild(GuildID)
@@ -34,10 +40,6 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    my_file = open("list-all-TLD.txt", "r")  # Use a much thiccer list derived from the origional URL
-    content = my_file.read()
-
-    scam_links_1 = content.split("\n")
     for y in scam_links_1:
         if y.casefold() in message2 and y != '' and y not in bot.official_urls:
             try:
