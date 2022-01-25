@@ -24,7 +24,8 @@ async def on_message(message):
     message2 = message.content.casefold()
     deleted = False
 
-    if message.author == bot.user:
+    # ignore messages from bots
+    if message.author == bot.user.id:
         return
     if message.author.bot:
         return
@@ -33,7 +34,7 @@ async def on_message(message):
     url = 'https://raw.githubusercontent.com/BuyMyMojo/discord-scam-links/steam-free-nutro_ru_com/list.txt'
     discord_scam_list = requests.get(url).text
     scam_links_1 = discord_scam_list.split("\n")
-    scam_links_2 = discord_scam_list.split("\r\n")
+    scam_links_2 = discord_scam_list.split("\r\n") # using this helped with another list of URLs I've used in the past, keeping it in just in case
     for y in scam_links_1:
         if y in message2 and y != '':
             try:
@@ -60,7 +61,7 @@ async def on_message(message):
         await bot.process_commands(message)
 
 
-@bot.command()
+@bot.command(aliases=['invitelink', 'link'])
 async def invite(ctx):
     """Send a DM to user with invite link"""
     member = get_member(ctx.message.guild.id, ctx.message.author.id)
@@ -72,6 +73,26 @@ async def invite(ctx):
     embed.add_field(name="Invite link:",
                     value="https://discord.com/api/oauth2/authorize?client_id=935372708089315369&permissions=2147560448&scope=bot",
                     inline=False)
+    await channel.send(embed=embed)
+    await ctx.message.delete()
+
+
+@bot.command(aliases=['about'])
+async def info(ctx):
+    """Send a DM to user with info about the bot"""
+    member = get_member(ctx.message.guild.id, ctx.message.author.id)
+    channel = await member.create_dm()
+    embed = nextcord.Embed(title="About me", description="So what do you wanna know?", color=random.randint(0, 0xFFFFFF))
+    embed.add_field(name="Who made the bot?", value="The bot was made by BuyMyMojo#0308 on discord", inline=False)
+    embed.add_field(name="Can I host my own copy?",
+                    value="Yes! go grab the code from https://github.com/BuyMyMojo/discord-scam-protection-bot",
+                    inline=True)
+    embed.add_field(name="What links does this remove?",
+                    value="All the links found in BuildBot42's repo https://github.com/BuildBot42/discord-scam-links",
+                    inline=True)
+    embed.add_field(name="Where do I submit links the bot missed?",
+                    value="email them to me at hello@buymymojo.net in case discord flags you as a spam user in the future",
+                    inline=True)
     await channel.send(embed=embed)
     await ctx.message.delete()
 
