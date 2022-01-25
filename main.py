@@ -29,6 +29,7 @@ async def on_message(message):
     if message.author.bot:
         return
 
+    # this is my personal fork of the list until the main fork takes my changes
     url = 'https://raw.githubusercontent.com/BuyMyMojo/discord-scam-links/steam-free-nutro_ru_com/list.txt'
     discord_scam_list = requests.get(url).text
     scam_links_1 = discord_scam_list.split("\n")
