@@ -3,8 +3,7 @@ import re
 import tldextract
 
 from nextcord.ext import commands
-from thefuzz import fuzz, process
-from urllib.parse import urlparse
+from thefuzz import fuzz
 from bot import ScamProtectionBot
 
 
@@ -18,7 +17,6 @@ class Events(commands.Cog):
 
     @commands.Cog.listener("on_ready")
     async def on_ready(self):
-        await self.bot.change_presence(activity=nextcord.Game(name="use ->invite to get an invite link! | 🧹 Removing scam bots 🧹 "))
         print("Online")
 
     @commands.Cog.listener("on_message")

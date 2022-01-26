@@ -13,11 +13,13 @@ class Commands(commands.Cog):
     @commands.command(name="log", aliases=["log_channel"])
     @commands.has_guild_permissions(administrator=True)
     async def _log(self, ctx: commands.Context, channel: commands.TextChannelConverter=None):
+        """Set log channel for the current guild"""
         await ctx.send(f"Log channel has been set to <#{self.bot.set_log(ctx.guild.id, ctx.channel.id if not channel else channel.id)}> in this guild.")
 
     @commands.command(name="fuzzy", aliases=["togglefuzzy"])
     @commands.has_guild_permissions(administrator=True)
     async def _fuzzy(self, ctx: commands.Context):
+        """Toggle fuzzy search for the current guild"""
         await ctx.send(f"Fuzzy search has been set to `{self.bot.toggle_fuzzy(ctx.guild.id)}` in this guild.")
 
     @commands.command(aliases=['invitelink', 'link'])
