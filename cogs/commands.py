@@ -1,5 +1,4 @@
 import nextcord
-import random
 from nextcord.ext import commands
 
 from bot import ScamProtectionBot
@@ -9,6 +8,19 @@ class Commands(commands.Cog):
 
     def __init__(self, bot):
         self.bot: ScamProtectionBot = bot
+
+    @commands.command(name="mlog", aliases=["mainlog"])
+    @commands.is_owner()
+    async def _mlog(self, ctx: commands.Context):
+        """Set the main log channel to the current channel"""
+        webhook: nextcord.Webhook = None
+        if len(await ctx.channel.webhooks()) <= 0:
+            webhook = await ctx.channel.create_webhook(name="Scam Protection Webhook")
+        else:
+            webhook = (await ctx.channel.webhooks())[0]
+        self.bot.config['log_webhook'] = str(webhook.id)
+        self.bot.save_config()
+        await ctx.send(f"Main (global) log webhook has been set to `{webhook.id}`.")
 
     @commands.command(name="log", aliases=["log_channel"])
     @commands.has_guild_permissions(administrator=True)
@@ -29,11 +41,11 @@ class Commands(commands.Cog):
             ctx.message.guild.id, ctx.message.author.id)
         channel = await member.create_dm()
         embed = nextcord.Embed(title="Invite me!",
-                               url="https://discord.com/api/oauth2/authorize?client_id=935372708089315369&permissions=2147560448&scope=bot",
-                               description="So you want to invite me to a server to keep it clean? here is the invite link you need!",
-                               color=random.randint(0, 0xFFFFFF))
+                               url=f"https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=2147560448&scope=bot",
+                               description="So you want to invite me to a server to keep it clean? Here is the invite link you need!",
+                               color=nextcord.Colour.random())
         embed.add_field(name="Invite link:",
-                        value="https://discord.com/api/oauth2/authorize?client_id=935372708089315369&permissions=2147560448&scope=bot",
+                        value=f"https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=2147560448&scope=bot",
                         inline=False)
         await channel.send(embed=embed)
         await ctx.message.delete()
@@ -45,7 +57,7 @@ class Commands(commands.Cog):
             ctx.message.guild.id, ctx.message.author.id)
         channel = await member.create_dm()
         embed = nextcord.Embed(
-            title="About me", description="So what do you wanna know?", color=random.randint(0, 0xFFFFFF))
+            title="About me", description="So what do you wanna know?", color=nextcord.Colour.random())
         embed.add_field(name="Who made the bot?",
                         value="The bot was made by BuyMyMojo#0308 on discord", inline=False)
         embed.add_field(name="Can I host my own copy?",
