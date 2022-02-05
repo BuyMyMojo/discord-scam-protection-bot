@@ -11,6 +11,22 @@ class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot: ScamProtectionBot = bot
 
+    @commands.command(name="purge", aliases=["purgescam", "removescam", "delmessages"])
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_messages=True)
+    async def _purge(self, ctx: commands.Context, message: commands.MessageConverter = None):
+        if message:
+            message = message.content
+        elif ctx.message.reference:
+            message = (await ctx.channel.fetch_message(ctx.message.reference.message_id)).content
+        else:
+            await ctx.send("No message specified")
+            return
+        m = await ctx.send("Started purging messages...")
+        clean = [0]
+        await self.bot.purgemessage(ctx.guild, message, clean)
+        await m.edit(content=f"Purged {clean[0]} messages!")
+
     @commands.command(name="mlog", aliases=["mainlog"])
     @commands.is_owner()
     async def _mlog(self, ctx: commands.Context):

@@ -81,9 +81,22 @@ class ScamProtectionBot(commands.Bot):
             self.loop.create_task(self.announce_guild(
                 guild_id, message, confidence=confidence))
 
-    def purgescam(self, guild, message):
+    async def purgemessage(self, guild, message_content, cleanvar):
         def check(m):
-            if m.content == message:
+            if m.content == message_content:
+                cleanvar[0] += 1
+                self.state['cleaned'] += 1
+                return True
+            return False
+
+        for c in guild.channels:
+            if isinstance(c, nextcord.TextChannel):
+                await c.purge(limit=100, check=check)
+
+
+    def purgescam(self, guild, message_content):
+        def check(m):
+            if m.content == message_content:
                 self.state['cleaned'] += 1
                 return True
             return False
