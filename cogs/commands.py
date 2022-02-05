@@ -59,7 +59,7 @@ class Commands(commands.Cog):
         embed = nextcord.Embed(
             title="About me", description="So what do you wanna know?", color=nextcord.Colour.random())
         embed.add_field(name="Who made the bot?",
-                        value="The bot was made by BuyMyMojo#0308 on discord", inline=False)
+                        value="The bot was made by BuyMyMojo#0308 on discord with massive help from grialion on Discord and GitHub", inline=False)
         embed.add_field(name="Can I host my own copy?",
                         value="Yes! go grab the code from https://github.com/BuyMyMojo/discord-scam-protection-bot",
                         inline=True)
