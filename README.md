@@ -20,3 +20,9 @@ Additionally has a fuzzy search feature to detect any scam link
    - Or replace `os.environ.get('scam_cleaner_token')` at the bottom of `main.py` with your bot token in quotes
 3. Run the bot
     - `python ./main.py`
+
+## Authors
+
+- [@BuyMyMojo](https://www.github.com/BuyMyMojo)
+- [@grialion](https://github.com/grialion)
+
