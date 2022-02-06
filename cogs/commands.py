@@ -81,11 +81,11 @@ class Commands(commands.Cog):
             ctx.message.guild.id, ctx.message.author.id)
         channel = await member.create_dm()
         embed = nextcord.Embed(title="Invite me!",
-                               url=f"https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=2147560448&scope=bot",
+                               url=f"https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=277025745990&scope=bot%20applications.commands",
                                description="So you want to invite me to a server to keep it clean? Here is the invite link you need!",
                                color=nextcord.Colour.random())
         embed.add_field(name="Invite link:",
-                        value=f"https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=2147560448&scope=bot",
+                        value=f"https://discord.com/api/oauth2/authorize?client_id={self.bot.user.id}&permissions=277025745990&scope=bot%20applications.commands",
                         inline=False)
         await channel.send(embed=embed)
         await ctx.message.delete()
