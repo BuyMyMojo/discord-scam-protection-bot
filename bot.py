@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import nextcord
 from nextcord.ext import commands
@@ -9,14 +10,22 @@ class ScamProtectionBot(commands.Bot):
     match_urls = ['discord.com', 'steamcommunity.com', 'steampowered.com']
     config = {}
     userspam = {}
+    state = {}
 
     def __init__(self, **attrs):
         super().__init__(**attrs)
+        self.state = {
+            "start": int(datetime.now().timestamp()),
+            "detected": [],
+            "unique": [],
+            "cleaned": 0
+        }
         try:
             self.config = json.load(open("config.json", "r"))
         except FileNotFoundError:
             self.config = attrs.get("default_config")
             self.save_config()
+
     async def resolve_owner(self):
         # lmao remove this garbage if you don't need it, i just have my bot on an alt cuz my applications on my main are full
         app = await self.application_info()
@@ -65,16 +74,37 @@ class ScamProtectionBot(commands.Bot):
     def announce(self, guild_id: int, message: nextcord.Message, domain: str, confidence):
         webhook_id = self.config["log_webhook"]
         if webhook_id:
-            self.loop.create_task(self.announce_main(int(webhook_id), message, domain, confidence=confidence))
+            self.loop.create_task(self.announce_main(
+                int(webhook_id), message, domain, confidence=confidence))
 
         if self.config['ban']:
-            self.loop.create_task(self.announce_guild(guild_id, message, confidence=confidence))
+            self.loop.create_task(self.announce_guild(
+                guild_id, message, confidence=confidence))
 
-    def purgescam(self, guild, message):
+    async def purgemessage(self, guild, message_content, cleanvar):
+        def check(m):
+            if m.content == message_content:
+                cleanvar[0] += 1
+                self.state['cleaned'] += 1
+                return True
+            return False
+
+        for c in guild.channels:
+            if isinstance(c, nextcord.TextChannel):
+                await c.purge(limit=100, check=check)
+
+
+    def purgescam(self, guild, message_content):
+        def check(m):
+            if m.content == message_content:
+                self.state['cleaned'] += 1
+                return True
+            return False
+
         for c in guild.channels:
             if isinstance(c, nextcord.TextChannel):
                 self.loop.create_task(
-                    c.purge(limit=100, check=lambda m: m.content == message))
+                    c.purge(limit=100, check=check))
 
     def save_config(self):
         json.dump(self.config, open('config.json', 'w'))

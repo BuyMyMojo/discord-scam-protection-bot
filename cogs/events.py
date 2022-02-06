@@ -47,6 +47,10 @@ class Events(commands.Cog):
                     continue
                 if domain in self.bot.config['blacklist']:
                     self.bot.loop.create_task(message.delete())
+                    self.bot.state['cleaned'] += 1
+                    self.bot.state['detected'].append(domain)
+                    if domain not in self.bot.state['unique']:
+                        self.bot.state['unique'].append(domain)
                     if self.bot.config['ban']:
                         self.bot.loop.create_task(message.author.ban(delete_message_days=1, reason="Posted blacklisted URL"))
                         self.bot.loop.create_task(self.bot.announce_guild(
@@ -77,6 +81,11 @@ class Events(commands.Cog):
 
             if scam > 80:
                 # try to detect the scam link from the first appearence
+
+                self.bot.state['detected'].append(domain)
+                if domain not in self.bot.state['unique']:
+                    self.bot.state['unique'].append(domain)
+
                 if self.bot.config['ban']:
                     self.bot.loop.create_task(message.author.ban(
                         delete_message_days=1, reason="Posted scam URL"))
@@ -118,6 +127,10 @@ class Events(commands.Cog):
                     (2 if ','.join(msg['links']) == ','.join(links) else 1)
 
             if total_risk >= 100:
+                self.bot.state['detected'].append(domain)
+                if domain not in self.bot.state['unique']:
+                    self.bot.state['unique'].append(domain)
+
                 if self.bot.config['ban']:
                     self.bot.loop.create_task(message.author.ban(
                         delete_message_days=1, reason="Posted scam URL"))
