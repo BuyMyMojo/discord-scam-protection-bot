@@ -1,5 +1,5 @@
 nextcord==2.0.0a6
-requests==2.27.1
+requests==2.31.0
 thefuzz>=0.19.0
 tldextract>=3.1.2
 python-Levenshtein>=0.12.2
